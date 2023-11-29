@@ -1,20 +1,11 @@
 """Console script for sv_accuracy."""
-# todo
-
-
 import typer
+from sv_accuracy.sv_accuracy import get_accuracy
 
 
-def main_function():
-    '''
-    This function should just be type hinted with common types,
-    and it will run as a command line function
-    Simple function
-
-    >>> main()
-
-    '''
-    return
+def main_function(truth_vcf_file_name: str, sample_vcf_file_name: str):
+    accuracy = get_accuracy(truth_vcf_file_name, sample_vcf_file_name)
+    print(accuracy)
 
 
 def main():
