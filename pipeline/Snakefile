@@ -1,0 +1,63 @@
+
+
+rule get_population:
+    output:
+        "data/population.vcf.gz"
+    shell:
+        "cp ../tests/population_large.vcf.gz {output}"
+
+
+rule get_reference:
+    output:
+        "data/reference.fa"
+    shell:
+        "cp ../tests/reference.fa {output}"
+
+
+rule extract_individual_from_population:
+    input:
+        "data/population.vcf.gz"
+    output:
+        "data/truth/{individual}.vcf.gz"
+    shell:
+        "bcftools view -s {wildcards.individual} {input} -Oz -o {output}"
+
+
+rule simulate_reads:
+    input:
+        individual="data/truth/{individual}.vcf.gz",
+        ref="data/reference.fa"
+    output:
+        "data/{individual}.fq.gz"
+    shell:
+        "kage simulate_reads -f {input.ref} -v {input.individual} -o {output} --coverage 15.0"
+
+
+rule kage_index:
+    input:
+        ref="data/reference.fa",
+        population="data/population.vcf.gz"
+    output:
+        "data/kage_index.npz"
+    shell:
+        "kage index -r {input.ref} -v {input.population} -o {output}"
+
+
+rule genotype_individual:
+    input:
+        reads="data/{individual}.fq.gz",
+        index="data/kage_index.npz"
+    output:
+        "data/kage/{individual}.vcf.gz"
+    shell:
+        "kage genotype -i {input.index} -o {output} -r {input.reads}"
+
+
+rule measure_accuracy:
+    input:
+        truth="data/truth/{individual}.vcf.gz",
+        predicted="data/kage/{individual}.vcf.gz"
+    output:
+        "data/kage/{individual}.accuracy.txt"
+    shell:
+        "sv_accuracy {input.truth} {input.predicted} > {output}"
