@@ -1,0 +1,25 @@
+##fileformat=VCFv4.2
+##FILTER=<ID=PASS,Description="All filters passed">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##INFO=<ID=CONFLICT,Number=.,Type=String,Description="Sample names for which there are multiple paths in the graph with conflicting alleles">
+##INFO=<ID=AC,Number=A,Type=Integer,Description="Total number of alternate alleles in called genotypes">
+##INFO=<ID=AF,Number=A,Type=Float,Description="Estimated allele frequency in the range (0,1]">
+##INFO=<ID=NS,Number=1,Type=Integer,Description="Number of samples with data">
+##INFO=<ID=AN,Number=1,Type=Integer,Description="Total number of alleles in called genotypes">
+##INFO=<ID=LV,Number=1,Type=Integer,Description="Level in the snarl tree (0=top level)">
+##INFO=<ID=PS,Number=1,Type=String,Description="ID of variant corresponding to parent snarl">
+##INFO=<ID=AT,Number=R,Type=String,Description="Allele Traversal as path in graph">
+##contig=<ID=1,length=248956422>
+##bcftools_viewVersion=1.14+htslib-1.14
+##INFO=<ID=ID,Number=A,Type=String,Description="Variant IDs per ALT allele.">
+##bcftools_viewVersion=1.4.1+htslib-1.4.1
+##bcftools_viewVersion=1.10.2+htslib-1.10.2-3ubuntu0.1
+##bcftools_viewCommand=view --samples HG00673 population_large.vcf.gz; Date=Wed Nov 29 13:20:17 2023
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	HG00673
+1	586001	>2534127>2534130	G	A	60	.	AC=1;AF=0.459459;AN=2;AT=>2534127>2534129>2534130,>2534127>2534128>2534130;LV=0;NS=41;ID=1-586001-SNV->2534127>2534128>2534130-1	GT	1|0
+1	586045	>2534130>2534133	G	A	60	.	AC=0;AF=0.0405405;AN=2;AT=>2534130>2534132>2534133,>2534130<2534131>2534133;LV=0;NS=41;ID=1-586045-SNV->2534130<2534131>2534133-1	GT	0|0
+1	586069	>2534133>2534136	T	A	60	.	AC=0;AF=0.5;AN=2;AT=>2534133>2534135>2534136,>2534133>2534134>2534136;LV=0;NS=41;ID=1-586069-SNV->2534133>2534134>2534136-1	GT	0|0
+1	586073	>2534136>2534139	C	T	60	.	AC=0;AF=0.0405405;AN=2;AT=>2534136>2534138>2534139,>2534136>2534137>2534139;LV=0;NS=41;ID=1-586073-SNV->2534136>2534137>2534139-1	GT	0|0
+1	586142	>2534139>2534142	A	G	60	.	AC=0;AF=0.0810811;AN=2;AT=>2534139>2534141>2534142,>2534139>2534140>2534142;LV=0;NS=41;ID=1-586142-SNV->2534139>2534140>2534142-1	GT	0|0
+1	586155	>2534142>2534145	G	A	60	.	AC=0;AF=0.0135135;AN=2;AT=>2534142>2534144>2534145,>2534142>2534143>2534145;LV=0;NS=41;ID=1-586155-SNV->2534142>2534143>2534145-1	GT	0|0
+1	586185	>2534145>2534148	C	T	60	.	AC=0;AF=0.0810811;AN=2;AT=>2534145>2534147>2534148,>2534145>2534146>2534148;LV=0;NS=41;ID=1-586185-SNV->2534145>2534146>2534148-1	GT	1|1
