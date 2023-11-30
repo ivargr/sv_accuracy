@@ -1,0 +1,78 @@
+
+
+
+rule get_pangenome:
+    output:
+        "data/pangenome.vcf.gz"
+    shell:
+        """
+        cp ../tests/population_large.vcf.gz {output}
+        """
+
+
+rule extract_individual:
+    input:
+        "data/pangenome.vcf.gz"
+    output:
+        "data/truth/{individual}.vcf.gz"
+    shell:
+        """
+        bcftools view -s {wildcards.individual} {input} -Oz -o {output}
+        """
+
+rule simulate_reads_for_individual:
+    input:
+        individual_variants="data/truth/{individual}.vcf.gz",
+        reference_genome="../tests/reference.fa"
+    output:
+        "data/reads/{individual}-{coverage}.fastq.gz"
+    shell:
+        """
+        kage simulate_reads -f {input.reference_genome} -v {input.individual_variants} -o {output} --coverage {wildcards.coverage}
+        """
+
+
+rule make_kage_index:
+    input:
+        reference_genome="../tests/reference.fa",
+        variants = "data/pangenome.vcf.gz"
+    output:
+        "data/index.npz"
+    shell:
+        """
+        kage index -r {input.reference_genome} -v {input.variants} -o {output}
+        """
+
+
+rule genotype_individual:
+    input:
+        index="data/index.npz",
+        reads="data/reads/{individual}-{coverage}.fastq.gz",
+    output:
+        "data/genotypes/{individual}-{coverage}.vcf.gz"
+    shell:
+        """
+        kage genotype  -r {input.reads} -i {input.index} -o {output}
+        """
+
+
+
+rule accuracy:
+    input:
+        truth="data/truth/{individual}.vcf.gz",
+        calls="data/genotypes/{individual}-{coverage}.vcf.gz"
+    output:
+        "data/accuracy-{individual}-{coverage}.txt"
+    shell:
+        """
+        sv_accuracy {input.truth} {input.calls} > {output}
+        """
+
+
+rule run_for_multiple_coverages:
+    input:
+        ["data/accuracy-{individual}-" + str(coverage) + ".txt" for coverage in range(5, 30, 5)]
+    output:
+        "table1-{individual}.txt"
+    shell:
+        "cat {input} > {output}"
