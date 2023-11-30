@@ -2,20 +2,19 @@
 
 """Tests for `sv_accuracy` package."""
 
-import pytest
+import bionumpy as bnp
+
+from sv_accuracy.sv_accuracy import calculate_accuracy
 
 
-@pytest.fixture
-def response():
-    """Sample pytest fixture.
+def test_calculate_accuracy():
+    calls = bnp.open('calls_small.vcf', buffer_type=bnp.io.VCFMatrixBuffer).read()
+    truth = bnp.open('truth_small.vcf', buffer_type=bnp.io.VCFMatrixBuffer).read()
+    assert calculate_accuracy(truth, truth) == 1  # 5/7
+    assert calculate_accuracy(truth, calls) == 5 / 7
+    assert calculate_accuracy(truth, calls[1:]) == 4 / 7
+    assert calculate_accuracy(truth, calls[6:]) == 0 / 7
 
-    See more at: http://doc.pytest.org/en/latest/fixture.html
-    """
-    # import requests
-    # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
-
-
-def test_content(response):
-    """Sample pytest test function with the pytest fixture as an argument."""
-    # from bs4 import BeautifulSoup
-    # assert 'GitHub' in BeautifulSoup(response.content).title.string
+def test_calculate_accuracy_big_acceptance():
+    calls = bnp.open('population_large.vcf.gz', buffer_type=bnp.io.VCFMatrixBuffer).read()
+    assert calculate_accuracy(calls, calls) == 1
